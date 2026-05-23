@@ -13,7 +13,7 @@ async function main() {
     await client.query(`
       DROP TABLE IF EXISTS messages;
       DROP TABLE IF EXISTS users;
-      TRUNCATE TABLE session;
+      TRUNCATE TABLE IF EXISTS session;
     `);
 
     console.log("Creating users table...");

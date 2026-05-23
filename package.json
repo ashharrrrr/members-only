@@ -4,6 +4,7 @@
   "description": "A members only messaging site to learning about authenticaiton and authorization through session",
   "main": "index.js",
   "scripts": {
+    "postinstall": "node db/populateDB.js"
     "devStart": "node app.js --watch",
     "db:reset": "node db/populateDB.js"
   },
