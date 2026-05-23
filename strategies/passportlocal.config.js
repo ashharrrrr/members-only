@@ -11,7 +11,7 @@ export default passport.use(
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
-      const match = await bcryptjs.compare(password, user.password);
+      const match = await bcryptjs.compare(password, user.password_hash);
       if (!match) {
         return done(null, false, { message: "Incorrect Password" });
       }
@@ -24,16 +24,15 @@ export default passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  return done(null, user.user_id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
-        console.log("hello")
-    const { rows } = await pool.query("SELECT * FROM users WHERE id =$1", [id]);
+    const { rows } = await pool.query("SELECT * FROM users WHERE user_id = $1", [id]);
     const user = rows[0];
-    done(null, user);
+    return done(null, user);
   } catch (err) {
-    done(err);
+    return done(err);
   }
 });

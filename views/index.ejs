@@ -7,17 +7,33 @@
 <body>
   <% if (locals.user) {%>
     <h1>WELCOME BACK <%= user.username %></h1>
-    <a href="/log-out">LOG OUT</a>
+    <a href="/message">create message!</a>
+    <a href="/logout">LOG OUT</a>
+    <% if (locals.user && !locals.user.is_member){ %>
+      <a href="/member">Become Member</a>
+      <a href="/admin">Admin Login</a>
+    <% } %>
   <% } else { %>
-    <h1>please log in</h1>
-    <form action="/log-in" method="POST">
-      <label for="username">Username</label>
-      <input id="username" name="username" placeholder="username" type="text" />
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" />
-      <button type="submit">Log In</button>
-    </form>
+    <a href="/login">please log in</a> </br>
+    <a href="/register"> Don't have an account yet? Sign up! </a>
   <%}%>
+    <% messages.forEach((message) => { %>
+      <% console.log("user in index view:", user) %>
+      <div>
+        <% if (locals.user && locals.user.is_member) {%>  
+          <h1> <%= message.username %> </h1>
+          <p> <%= message.created_at %> </p>
+      <% } else {%>
+          <h1> Anonymous (become a member to see the user) </h1>
+      <% } %>
+        <p> <%= message.title %> </p>
+        <p> <%= message.body %> </p>
+        <% if (locals.user && locals.user.is_admin) { %>
+          <form action="/message/delete/<%= message.message_id %>" method="POST">
+            <button type="submit">Delete</button>
+          </form>
+        <% } %>
+      </div>
+    <%})%>
 </body>
 </html>
-

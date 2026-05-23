@@ -13,14 +13,18 @@ async function main() {
     await client.query(`
       DROP TABLE IF EXISTS messages;
       DROP TABLE IF EXISTS users;
+      TRUNCATE TABLE session;
     `);
 
     console.log("Creating users table...");
     await client.query(`
       CREATE TABLE users (
         user_id BIGSERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
         username TEXT NOT NULL UNIQUE,
         password_hash TEXT NOT NULL,
+        is_member BOOLEAN NOT NULL DEFAULT FALSE,
+        is_admin BOOLEAN NOT NULL DEFAULT FALSE,
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       );
     `);

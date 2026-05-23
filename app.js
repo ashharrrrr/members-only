@@ -9,7 +9,7 @@ import passport from "passport";
 import "dotenv/config";
 import "./strategies/passportlocal.config.js";
 
-// some plumbing to make view engine work in type: module
+// some shit to make view engine work in type: module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -39,6 +39,20 @@ app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 // router config
 app.use("/", indexRouter);
+
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+
+  const status = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+
+  res.status(status).json({
+    success: false,
+    status,
+    message
+  });
+});
 
 app.listen(3000, (error) => {
   if (error) {
